@@ -1,0 +1,9 @@
+fastapi
+uvicorn[standard]
+openai-agents
+requests
+beautifulsoup4
+httpx
+playwright
+python-dotenv
+nest_asyncio
