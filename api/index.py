@@ -599,9 +599,6 @@
 import os
 import ssl
 import socket
-import time
-import random
-import asyncio
 from datetime import datetime
 from urllib.parse import urlparse, urljoin
 import logging
@@ -627,7 +624,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("api.chat")
 
 # ENV / LLM config
-API_KEY = os.getenv("API_KEY")           # Put your Gemini API key here in Vercel env
+API_KEY = os.getenv("GEMINI_API_KEY")           # Put your Gemini API key here in Vercel env
 MODEL = os.getenv("MODEL", "gemini-2.0-flash")
 GEMINI_BASE = os.getenv("GEMINI_BASE_URL", "https://generativelanguage.googleapis.com")
 
