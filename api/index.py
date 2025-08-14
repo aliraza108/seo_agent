@@ -15,10 +15,43 @@ import time
 from urllib.parse import urlparse, urljoin
 from agents import function_tool, Runner, Agent, set_default_openai_api, set_tracing_disabled, AsyncOpenAI, set_default_openai_client, AgentHooks
 from mangum import Mangum
+import asyncio
+import httpx
+import random
+import time
+from urllib.parse import urlparse, urljoin
+from bs4 import BeautifulSoup
+
+
+import uvicorn
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
+import os
+
+from agents import function_tool, Runner, Agent, set_default_openai_api, set_tracing_disabled, RunHooks, guardrail, RunContextWrapper, RunConfig, AsyncOpenAI, OpenAIChatCompletionsModel, set_default_openai_client, AgentHooks, ModelSettings
+from openai.types.responses import ResponseTextDeltaEvent
+from agents.agent import StopAtTools
+import asyncio
+import os
+from dataclasses import dataclass
+from pydantic import BaseModel
+from agents import function_tool
+
+from agents import function_tool
+import requests
+from bs4 import BeautifulSoup
+import httpx
+import httpx
+import ssl
+import socket
+from datetime import datetime
+from agents import function_tool
 
 # Initialize the FastAPI app
 app = FastAPI()
 
+history = []
 # Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
@@ -30,11 +63,6 @@ app.add_middleware(
 
 
 
-import uvicorn
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
-import os
 # 1. Initialize the FastAPI app
 app = FastAPI()
 
@@ -48,24 +76,12 @@ app.add_middleware(
     allow_headers=["*"],  # Allows all headers
 )
 
-# 3. Define the request model
 # This ensures the data sent from the frontend has the correct structure.
 class ChatRequest(BaseModel):
     message: str
 
 
 
-
-
-from agents import function_tool
-import requests
-from bs4 import BeautifulSoup
-import httpx
-import httpx
-import ssl
-import socket
-from datetime import datetime
-from agents import function_tool
 
 @function_tool
 async def scrap_full_text(site: str) -> dict:
@@ -341,13 +357,6 @@ async def scrap_images(site: str) -> dict:
     except Exception as e:
         return {"error": f"An error occurred: {str(e)}"}
 
-import asyncio
-import httpx
-import random
-import time
-from urllib.parse import urlparse, urljoin
-from bs4 import BeautifulSoup
-
 @function_tool
 async def get_all_pages_classified(site: str):
     # ───────── CONFIG ─────────
@@ -470,16 +479,9 @@ async def get_all_pages_classified(site: str):
             print(f"{i:04d}: {link}")
 
     return all_links_by_status
-# Example call
 
-from agents import function_tool, Runner, Agent, set_default_openai_api, set_tracing_disabled, RunHooks, guardrail, RunContextWrapper, RunConfig, AsyncOpenAI, OpenAIChatCompletionsModel, set_default_openai_client, AgentHooks, ModelSettings
-from openai.types.responses import ResponseTextDeltaEvent
-from agents.agent import StopAtTools
-import asyncio
-import os
-from dataclasses import dataclass
-from pydantic import BaseModel
-from agents import function_tool
+
+
 api_key = os.environ.get("GEMINI_API_KEY") 
 MODEL = 'gemini-2.0-flash'
 client = AsyncOpenAI(
@@ -492,11 +494,6 @@ set_default_openai_api('chat_completions')
 set_default_openai_client(client=client)
 set_tracing_disabled(True)
 
-#hooks
-class Agenthook(AgentHooks):
-    async def on_start(self, context, agent):
-        print("performance start")
-        return super().on_start(context, agent)
 
 agent = Agent(
     name="SEO Agent",
@@ -569,7 +566,7 @@ Proceed to await the user’s input.
 
 
 """,
- model=MODEL,
+    model=MODEL,
     tools=[
         get_all_pages_classified,
         scrap_images,
@@ -584,58 +581,54 @@ Proceed to await the user’s input.
     # result = Runner.run_streamed(agent, input='get Perormance_check of https://virtual-spark.vercel.app/ give me suggestions, performance of page for both, seo, score, and other things')
 
 
-
-
-history = []
-
-# 8. Define your API endpoint
-@app.post("/api/chat")
-async def chat_with_agent(request: ChatRequest):
-    print(f"Received message: {request.message}")
-
-    try:
-        # Create a new, local history for each request
-        history = [{"role": "user", "content": request.message}]
-        result = await Runner.run(agent, input=history)
-        return {"reply": result.final_output}
-    except Exception as e:
-        print(f"An error occurred: {e}")
-        return {"reply": f"An unexpected error occurred: {e}"}
-
-# The handler that Vercel needs to run your application
-handler = Mangum(app)
-
-
-
-
-
-
-
-
-
-
+# # 8. Define your API endpoint
 # @app.post("/api/chat")
 # async def chat_with_agent(request: ChatRequest):
-#     """
-#     This endpoint receives a message from the frontend, runs the agent,
-#     and returns the agent's full response.
-#     """
 #     print(f"Received message: {request.message}")
+
+#     try:
+#         # Create a new, local history for each request
+#         history = [{"role": "user", "content": request.message}]
+#         result = await Runner.run(agent, input=history)
+#         return {"reply": result.final_output}
+#     except Exception as e:
+#         print(f"An error occurred: {e}")
+#         return {"reply": f"An unexpected error occurred: {e}"}
+
+# # The handler that Vercel needs to run your application
+# handler = Mangum(app)
+
+
+
+
+
+
+
+
+
+
+@app.post("/api/chat")
+async def chat_with_agent(request: ChatRequest):
+    """
+    This endpoint receives a message from the frontend, runs the agent,
+    and returns the agent's full response.
+    """
+    print(f"Received message: {request.message}")
     
-#     # We create a simple history for each request.
-#     history = [{"role": "user", "content": request.message}]
+    # We create a simple history for each request.
+    history = [{"role": "user", "content": request.message}]
     
-#     full_response = ""
+    full_response = ""
 
-#     # 1. FIXED: Call the agent runner to get the 'result' stream.
-#     result = await Runner.run(agent, input=history)
-#     return {"reply": result.final_output}
+    # 1. FIXED: Call the agent runner to get the 'result' stream.
+    result = await Runner.run(agent, input=history)
+    return {"reply": result.final_output}
 
 
-# # This part is for local testing if you run the file directly,
-# # but we will use uvicorn to run it in Codespaces.
+# This part is for local testing if you run the file directly,
+# but we will use uvicorn to run it in Codespaces.
 
-# uvicorn.run(app, host="0.0.0.0", port=8000)
+uvicorn.run(app, host="0.0.0.0", port=8000)
 
 
 
