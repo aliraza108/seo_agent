@@ -90,38 +90,41 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     async function getBotResponse(userMessage) {
-        showTypingIndicator();
-        // Change this:
-        const apiUrl = '/chat';
+    showTypingIndicator();
+    const apiUrl = '/api/chat'; // must match file: api/chat.py -> POST /
 
-        // To this:
-        // const apiUrl = '/api/chat';
-        
+    try {
+        const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: userMessage }),
+        });
 
-        try {
-            const response = await fetch(apiUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ message: userMessage }),
-            });
+        const text = await response.text();
+        const contentType = response.headers.get('content-type') || '';
 
-            if (!response.ok) {
-                throw new Error(`Network response was not ok: ${response.status} ${response.statusText}`);
-            }
-            const data = await response.json();
-            const botReply = data.reply;
-
+        if (!response.ok) {
+            console.error('Server error', response.status, response.statusText, text);
             hideTypingIndicator();
-            addBotMessage(botReply.replace(/\n/g, '<br>'));
-
-        } catch (error) {
-            console.error('Error fetching bot response:', error);
-            hideTypingIndicator();
-            addBotMessage(error);
+            addBotMessage(`Server error ${response.status}: ${response.statusText}\n\n${text}`);
+            return;
         }
 
-        
+        if (contentType.includes('application/json')) {
+            const data = JSON.parse(text);
+            const botReply = data.reply || JSON.stringify(data);
+            hideTypingIndicator();
+            addBotMessage(botReply.replace(/\n/g, '<br>'));
+        } else {
+            // If we receive HTML (Vercel auth page) or other text — show it so you can debug
+            hideTypingIndicator();
+            addBotMessage(`Unexpected response (not JSON):\n\n${text}`);
+        }
+    } catch (err) {
+        console.error('Fetch failed', err);
+        hideTypingIndicator();
+        addBotMessage(String(err));
     }
+}
+
 });
