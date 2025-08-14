@@ -97,7 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // To this:
         const apiUrl = '/api/chat';
 
-        
+        try {
             const response = await fetch(apiUrl, {
                 method: 'POST',
                 headers: {
@@ -116,6 +116,10 @@ document.addEventListener('DOMContentLoaded', () => {
             hideTypingIndicator();
             addBotMessage(botReply.replace(/\n/g, '<br>'));
 
-        } 
+        } catch (error) {
+            console.error('Error fetching bot response:', error);
+            hideTypingIndicator();
+            addBotMessage("Sorry, I'm having trouble connecting to my brain right now. Please check the server console and try again.");
+        }
     }
-);
+});
