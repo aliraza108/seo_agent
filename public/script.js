@@ -92,7 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function getBotResponse(userMessage) {
         showTypingIndicator();
         // Change this:
-        const apiUrl = '/api/chat';
+        const apiUrl = '/chat';
 
         // To this:
         // const apiUrl = '/api/chat';

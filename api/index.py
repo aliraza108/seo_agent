@@ -559,15 +559,11 @@ app.add_middleware(
 
 
 
-@app.post("/chat")
+@app.post("/api/chat")
 async def chat_with_agent(request: ChatRequest):
     print(f"Received message: {request.message}")
-    try:
-        return {"reply": f"Echo: {request.message}"}
-    except Exception as e:
-        print(f"An error occurred: {e}")
-        return {"reply": f"An unexpected error occurred: {e}"}
-    
+    return {"reply": f"Echo: {request.message}"}
+
 
 
 
