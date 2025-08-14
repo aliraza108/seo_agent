@@ -559,13 +559,10 @@ app.add_middleware(
 
 
 
-@app.post("/api/chat")
+@app.post("/api/chat")  # <-- changed
 async def chat_with_agent(request: ChatRequest):
     print(f"Received message: {request.message}")
     return {"reply": f"Echo: {request.message}"}
-
-
-
 
 
 
