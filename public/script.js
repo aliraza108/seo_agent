@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function getBotResponse(userMessage) {
     showTypingIndicator();
-    const apiUrl = '/api/chat'; // must match file: api/chat.py -> POST /
+    const apiUrl = '/api/chat'; // must be this
 
     try {
         const response = await fetch(apiUrl, {
@@ -101,30 +101,30 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         const text = await response.text();
-        const contentType = response.headers.get('content-type') || '';
+        const ct = response.headers.get('content-type') || '';
 
         if (!response.ok) {
-            console.error('Server error', response.status, response.statusText, text);
             hideTypingIndicator();
+            // show server response body so you can debug
             addBotMessage(`Server error ${response.status}: ${response.statusText}\n\n${text}`);
+            console.error('Server error', response.status, response.statusText, text);
             return;
         }
 
-        if (contentType.includes('application/json')) {
+        if (ct.includes('application/json')) {
             const data = JSON.parse(text);
-            const botReply = data.reply || JSON.stringify(data);
-            hideTypingIndicator();
-            addBotMessage(botReply.replace(/\n/g, '<br>'));
+            addBotMessage((data.reply || JSON.stringify(data)).replace(/\n/g, '<br>'));
         } else {
-            // If we receive HTML (Vercel auth page) or other text — show it so you can debug
             hideTypingIndicator();
             addBotMessage(`Unexpected response (not JSON):\n\n${text}`);
+            console.error('Unexpected response', ct, text);
         }
     } catch (err) {
-        console.error('Fetch failed', err);
         hideTypingIndicator();
         addBotMessage(String(err));
+        console.error(err);
     }
 }
+
 
 });
