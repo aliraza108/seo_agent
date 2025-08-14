@@ -94,11 +94,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const apiUrl = '/api/chat'; // must be this
 
     try {
-        const response = await fetch(apiUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message: userMessage }),
-        });
+        const response = await fetch('/api/chat', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ message: "hello" })
+})
 
         const text = await response.text();
         const ct = response.headers.get('content-type') || '';
