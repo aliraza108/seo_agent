@@ -26,8 +26,6 @@ from agents import (
 )
 
 
-# Initialize the FastAPI app
-app = FastAPI()
 
 history = []
 # Add CORS middleware
@@ -41,8 +39,6 @@ app.add_middleware(
 
 
 
-# 1. Initialize the FastAPI app
-app = FastAPI()
 
 # 2. Add CORS middleware
 # This allows your frontend (running on a different port) to communicate with your backend.
@@ -573,18 +569,29 @@ app.add_middleware(
 
 # ... (rest of your code: models, tools, agent setup)
 
-# Updated endpoint
+## Updated endpoint
+# @app.post("/chat")
+# async def chat_with_agent(request: ChatRequest):
+#     print(f"Received message: {request.message}")
+#     try:
+#         result = await Runner.run(agent, input=request.message)
+#         return {"reply": result.final_output}
+#     except Exception as e:
+#         print(f"An error occurred: {e}")
+#         return {"reply": f"An unexpected error occurred: {e}"}
+
+
+
 @app.post("/chat")
 async def chat_with_agent(request: ChatRequest):
     print(f"Received message: {request.message}")
     try:
-        result = await Runner.run(agent, input=request.message)
-        return {"reply": result.final_output}
+        return {"reply": f"Echo: {request.message}"}
     except Exception as e:
         print(f"An error occurred: {e}")
         return {"reply": f"An unexpected error occurred: {e}"}
-
-# The handler that Vercel needs to run your application
+    
+    
 handler = Mangum(app)
 
 
