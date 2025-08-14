@@ -664,35 +664,27 @@
 
 
 
-
-
-
-# api/index.py
+# api/chat.py
 import os
 import logging
-from typing import Optional
-import httpx
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+import httpx
 
 logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger("api.index")
+logger = logging.getLogger("api.chat")
 
-# Env-configurable
-api_key = 'AIzaSyBFHEfqKOdI9HMWLlQCQRs7OUnrCsIpn_E'  # <- set this in Vercel
-PROVIDER = os.getenv("PROVIDER", "google").lower()  # "openai" or "google"
+# Environment config
+API_KEY = 'AIzaSyBFHEfqKOdI9HMWLlQCQRs7OUnrCsIpn_E'  # <-- set in Vercel
 MODEL = os.getenv("MODEL", "gemini-2.0-flash")
-# For Google generative API (if PROVIDER == "google"):
 GEMINI_BASE_URL = os.getenv("GEMINI_BASE_URL", "https://generativelanguage.googleapis.com")
 
-# FastAPI app
+# FastAPI app exported as `app` (Vercel expects this)
 app = FastAPI()
-
-# allow all origins during development; lock down for production
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["*"],   # dev: ok. lock down in production.
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -700,70 +692,23 @@ app.add_middleware(
 
 class ChatRequest(BaseModel):
     message: str
-    # optional: you can send more fields in future (e.g. temperature)
-
-async def call_openai_chat(message: str) -> str:
-    """
-    Call an OpenAI-compatible chat completions endpoint (if PROVIDER == "openai").
-    Expects API_KEY and MODEL set.
-    """
-    if not api_key:
-        raise RuntimeError("API_KEY not set in environment")
-
-    url = "https://api.openai.com/v1/chat/completions"
-    headers = {
-        "Authorization": f"Bearer {api_key}",
-        "Content-Type": "application/json",
-    }
-    payload = {
-        "model": MODEL,
-        "messages": [
-            {"role": "system", "content": "You are a helpful SEO assistant."},
-            {"role": "user", "content": message},
-        ],
-        "temperature": 0.2,
-        "max_tokens": 700,
-    }
-
-    async with httpx.AsyncClient(timeout=30.0) as client:
-        r = await client.post(url, headers=headers, json=payload)
-
-    if r.status_code >= 400:
-        logger.error("OpenAI error: %s %s", r.status_code, r.text)
-        raise RuntimeError(f"LLM request failed: {r.status_code} {r.text}")
-
-    data = r.json()
-    try:
-        return data["choices"][0]["message"]["content"].strip()
-    except Exception as e:
-        logger.exception("Failed to parse OpenAI response: %s", e)
-        raise RuntimeError("Unexpected OpenAI response format")
 
 async def call_google_gemini(message: str) -> str:
-    """
-    Call Google Generative Language API (Gemini) using the generate endpoint:
-    POST {GEMINI_BASE_URL}/v1/models/{MODEL}:generate
-    Set API_KEY and MODEL accordingly in Vercel env.
-    NOTE: Google API request/response fields may vary by model version.
-    """
-    if not api_key:
+    if not API_KEY:
         raise RuntimeError("API_KEY not set in environment")
 
-    # Build URL: .../v1/models/{MODEL}:generate
-    # If user provided full MODEL like "models/text-bison-001" keep it; otherwise prefix models/
+    # Build model path that matches Google's endpoint shape
     model_path = MODEL
-    if not model_path.startswith("models/") and ":" not in model_path:
-        # assume a simple model name like "gemini-2.0-flash"
+    if not model_path.startswith("models/"):
         model_path = f"models/{MODEL}"
 
     url = f"{GEMINI_BASE_URL}/v1/{model_path}:generate"
 
     headers = {
-        "Authorization": f"Bearer {api_key}",
+        "Authorization": f"Bearer {API_KEY}",
         "Content-Type": "application/json",
     }
 
-    # Basic payload for text generation; adjust fields as needed by the specific Gemini model
     payload = {
         "prompt": {
             "text": f"You are a helpful SEO assistant. User: {message}"
@@ -776,66 +721,43 @@ async def call_google_gemini(message: str) -> str:
         r = await client.post(url, headers=headers, json=payload)
 
     if r.status_code >= 400:
-        logger.error("Google Gemini error: %s %s", r.status_code, r.text)
+        logger.error("Gemini error: %s %s", r.status_code, r.text)
         raise RuntimeError(f"Gemini request failed: {r.status_code} {r.text}")
 
     data = r.json()
-    # Extraction - Google responses can vary; try common fields
-    # Try "candidates" or "outputs" or "text" extraction patterns
+    # Try common response shapes
     try:
-        # Common pattern: {"candidates":[{"output":"..."}]}
         if "candidates" in data and isinstance(data["candidates"], list):
             return data["candidates"][0].get("output", "").strip()
-        # Another pattern: {"outputs":[{"content":[{"text":"..."}]}]}
         if "outputs" in data and isinstance(data["outputs"], list):
             out0 = data["outputs"][0]
-            # find text in nested content
-            if isinstance(out0, dict):
-                # try outputs[0].content[0].text
-                content = out0.get("content")
-                if isinstance(content, list) and len(content) > 0 and isinstance(content[0], dict):
-                    txt = content[0].get("text")
-                    if txt:
-                        return txt.strip()
-        # fallback: if there's a top-level 'output' or 'generated_text'
+            if isinstance(out0, dict) and "content" in out0:
+                content = out0["content"]
+                if isinstance(content, list) and content and isinstance(content[0], dict):
+                    text = content[0].get("text")
+                    if text:
+                        return text.strip()
         for k in ("output", "generated_text", "text"):
             if k in data:
                 return str(data[k]).strip()
     except Exception as e:
-        logger.exception("Error while parsing Gemini response: %s", e)
+        logger.exception("Parsing gemini response issue: %s", e)
 
-    # As a final fallback, return the whole JSON as string (so you can inspect)
-    logger.warning("Could not parse Gemini response cleanly. Returning JSON dump.")
+    # fallback: return JSON dump so you can inspect it in UI/logs
+    logger.warning("Could not parse Gemini response; returning raw JSON string.")
     return str(data)
 
-async def call_llm(message: str) -> str:
-    """
-    Dispatch to provider-specific LLM call.
-    """
-    provider = PROVIDER.lower()
-    logger.info("LLM provider=%s model=%s", provider, MODEL)
-    if provider == "openai":
-        return await call_openai_chat(message)
-    elif provider == "google":
-        return await call_google_gemini(message)
-    else:
-        raise RuntimeError(f"Unknown PROVIDER '{PROVIDER}'. Set PROVIDER env to 'openai' or 'google'.")
-
-# Expose both endpoints so frontend hitting either /api/chat or /chat will work.
-@app.post("/api/chat")
-@app.post("/chat")
-async def chat_with_agent(request: ChatRequest):
-    logger.info("Received message: %s", request.message)
+@app.post("/")   # this maps to POST /api/chat because file is api/chat.py
+async def chat_endpoint(req: ChatRequest):
+    logger.info("Received /api/chat message: %s", req.message)
     try:
-        reply = await call_llm(request.message)
+        reply = await call_google_gemini(req.message)
         return {"reply": reply}
     except Exception as e:
-        # Log full exception to Vercel logs for debugging
-        logger.exception("Error in chat endpoint: %s", e)
-        # Provide structured JSON error so frontend doesn't try to parse HTML or other content
+        logger.exception("Error in /api/chat")
+        # Return a clean JSON error so frontend can display helpful info
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.get("/api/health")
-@app.get("/health")
+@app.get("/")   # optional health on /api/chat (GET)
 async def health():
-    return {"status": "ok"}
+    return {"status": "ok", "note": "api/chat endpoint live"}

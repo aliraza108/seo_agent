@@ -101,34 +101,31 @@ document.addEventListener('DOMContentLoaded', () => {
             body: JSON.stringify({ message: userMessage }),
         });
 
-        const text = await response.text(); // read raw body
+        const text = await response.text();
         const contentType = response.headers.get('content-type') || '';
 
         if (!response.ok) {
-            console.error('Server error:', response.status, response.statusText, text);
             hideTypingIndicator();
+            console.error('Server error', response.status, response.statusText, text);
             addBotMessage(`Server error ${response.status}: ${response.statusText}\n\n${text}`);
             return;
         }
 
         if (contentType.includes('application/json')) {
             const data = JSON.parse(text);
-            const botReply = data.reply || JSON.stringify(data);
-            hideTypingIndicator();
-            addBotMessage(botReply.replace(/\n/g, '<br>'));
+            addBotMessage((data.reply || JSON.stringify(data)).replace(/\n/g, '<br>'));
         } else {
-            // Not JSON — display so you can debug (e.g. HTML auth page or other)
-            console.error('Expected JSON but got:', contentType, text);
-            hideTypingIndicator();
+            // If HTML comes back, show it so you see Vercel auth or other platform pages
             addBotMessage(`Unexpected response (not JSON):\n\n${text}`);
         }
-
     } catch (err) {
-        console.error('Fetch failed:', err);
-        hideTypingIndicator();
+        console.error('Fetch failed', err);
         addBotMessage(String(err));
+    } finally {
+        hideTypingIndicator();
     }
 }
+
 
 
 
