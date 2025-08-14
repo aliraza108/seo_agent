@@ -460,7 +460,7 @@ async def get_all_pages_classified(site: str):
 
 
 
-api_key = os.environ.get("GEMINI_API_KEY") 
+api_key = 'AIzaSyBFHEfqKOdI9HMWLlQCQRs7OUnrCsIpn_E' 
 MODEL = 'gemini-2.0-flash'
 client = AsyncOpenAI(
     base_url="https://generativelanguage.googleapis.com/v1beta/openai/",
