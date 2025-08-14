@@ -581,54 +581,51 @@ Proceed to await the user’s input.
     # result = Runner.run_streamed(agent, input='get Perormance_check of https://virtual-spark.vercel.app/ give me suggestions, performance of page for both, seo, score, and other things')
 
 
-# # 8. Define your API endpoint
-# @app.post("/api/chat")
-# async def chat_with_agent(request: ChatRequest):
-#     print(f"Received message: {request.message}")
-
-#     try:
-#         # Create a new, local history for each request
-#         history = [{"role": "user", "content": request.message}]
-#         result = await Runner.run(agent, input=history)
-#         return {"reply": result.final_output}
-#     except Exception as e:
-#         print(f"An error occurred: {e}")
-#         return {"reply": f"An unexpected error occurred: {e}"}
-
-# # The handler that Vercel needs to run your application
-# handler = Mangum(app)
-
-
-
-
-
-
-
-
-
-
+# 8. Define your API endpoint
 @app.post("/api/chat")
 async def chat_with_agent(request: ChatRequest):
-    """
-    This endpoint receives a message from the frontend, runs the agent,
-    and returns the agent's full response.
-    """
     print(f"Received message: {request.message}")
+    try:
+        result = await Runner.run(agent, input=request.message)
+        return {"reply": result.final_output}
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return {"reply": f"An unexpected error occurred: {e}"}
+
+# The handler that Vercel needs to run your application
+handler = Mangum(app)
+
+
+
+
+
+
+
+
+
+
+# @app.post("/api/chat")
+# async def chat_with_agent(request: ChatRequest):
+#     """
+#     This endpoint receives a message from the frontend, runs the agent,
+#     and returns the agent's full response.
+#     """
+#     print(f"Received message: {request.message}")
     
-    # We create a simple history for each request.
-    history = [{"role": "user", "content": request.message}]
+#     # We create a simple history for each request.
+#     history = [{"role": "user", "content": request.message}]
     
-    full_response = ""
+#     full_response = ""
 
-    # 1. FIXED: Call the agent runner to get the 'result' stream.
-    result = await Runner.run(agent, input=history)
-    return {"reply": result.final_output}
+#     # 1. FIXED: Call the agent runner to get the 'result' stream.
+#     result = await Runner.run(agent, input=history)
+#     return {"reply": result.final_output}
 
 
-# This part is for local testing if you run the file directly,
-# but we will use uvicorn to run it in Codespaces.
+# # This part is for local testing if you run the file directly,
+# # but we will use uvicorn to run it in Codespaces.
 
-uvicorn.run(app, host="0.0.0.0", port=8000)
+# uvicorn.run(app, host="0.0.0.0", port=8000)
 
 
 
