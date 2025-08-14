@@ -9,7 +9,7 @@ import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-
+import os
 # 1. Initialize the FastAPI app
 app = FastAPI()
 
@@ -455,7 +455,7 @@ import os
 from dataclasses import dataclass
 from pydantic import BaseModel
 from agents import function_tool
-api_key = 'AIzaSyDrK9CeEq7O5mKSghmf5HsPpk8ZK3CFsmo'
+api_key = os.environ.get("GEMINI_API_KEY") 
 MODEL = 'gemini-2.0-flash'
 client = AsyncOpenAI(
     base_url="https://generativelanguage.googleapis.com/v1beta/openai/",
@@ -583,6 +583,15 @@ async def chat_with_agent(request: ChatRequest):
 
 # The handler that Vercel needs to run your application
 handler = Mangum(app)
+
+
+
+
+
+
+
+
+
 
 # @app.post("/api/chat")
 # async def chat_with_agent(request: ChatRequest):
