@@ -1,10 +1,35 @@
-# (Keep all your existing tool functions and agent definition code from the top)
-# ... all your @function_tool functions like scrap_full_text, Perormance_check, etc. ...
-# ... your agent = Agent(...) definition ...
+import uvicorn
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
+import os
+import requests
+from bs4 import BeautifulSoup
+import httpx
+import ssl
+import socket
+from datetime import datetime
+import asyncio
+import random
+import time
+from urllib.parse import urlparse, urljoin
+from agents import function_tool, Runner, Agent, set_default_openai_api, set_tracing_disabled, AsyncOpenAI, set_default_openai_client, AgentHooks
+from mangum import Mangum
 
-# --------------------------------------------------------------------
-# NEW CODE STARTS HERE - Replace your old message() function and asyncio.run()
-# --------------------------------------------------------------------
+# Initialize the FastAPI app
+app = FastAPI()
+
+# Add CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
