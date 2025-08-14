@@ -2,6 +2,7 @@ import ssl
 import socket
 import time
 import random
+import uvicorn
 import asyncio
 from datetime import datetime
 from urllib.parse import urlparse, urljoin
@@ -545,30 +546,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# ... (rest of your code: models, tools, agent setup)
-
-## Updated endpoint
-# @app.post("/chat")
-# async def chat_with_agent(request: ChatRequest):
-#     print(f"Received message: {request.message}")
-#     try:
-#         result = await Runner.run(agent, input=request.message)
-#         return {"reply": result.final_output}
-#     except Exception as e:
-#         print(f"An error occurred: {e}")
-#         return {"reply": f"An unexpected error occurred: {e}"}
+# Define request body model
+class ChatMessage(BaseModel):
+    message: str
 
 
-
-
-
-
-
-
-
-
-
-@app.post("/api/chat")
+@app.post("/chat")
 async def chat_with_agent(request: ChatRequest):
     """
     This endpoint receives a message from the frontend, runs the agent,
@@ -584,6 +567,19 @@ async def chat_with_agent(request: ChatRequest):
     # 1. FIXED: Call the agent runner to get the 'result' stream.
     result = await Runner.run(agent, input=request.message)
     return {"reply": result.final_output}
+
+
+# This part is for local testing if you run the file directly,
+# but we will use uvicorn to run it in Codespaces.
+
+
+
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+
+
 
 
 

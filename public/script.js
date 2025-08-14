@@ -90,41 +90,37 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     async function getBotResponse(userMessage) {
-    showTypingIndicator();
-    const apiUrl = '/api/chat'; // must be this
+        showTypingIndicator();
+        // Change this:
+        const apiUrl = 'http://localhost:8000/chat';
 
-    try {
-        const response = await fetch('/api/chat', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ message: "hello" })
-})
+        // To this:
+        // const apiUrl = '/api/chat';
+        
 
-        const text = await response.text();
-        const ct = response.headers.get('content-type') || '';
+        try {
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ message: userMessage }),
+            });
 
-        if (!response.ok) {
+            if (!response.ok) {
+                throw new Error(`Network response was not ok: ${response.statusText}`);
+            }
+
+            const data = await response.json();
+            const botReply = data.reply;
+
             hideTypingIndicator();
-            // show server response body so you can debug
-            addBotMessage(`Server error ${response.status}: ${response.statusText}\n\n${text}`);
-            console.error('Server error', response.status, response.statusText, text);
-            return;
-        }
+            addBotMessage(botReply.replace(/\n/g, '<br>'));
 
-        if (ct.includes('application/json')) {
-            const data = JSON.parse(text);
-            addBotMessage((data.reply || JSON.stringify(data)).replace(/\n/g, '<br>'));
-        } else {
+        } catch (error) {
+            console.error('Error fetching bot response:', error);
             hideTypingIndicator();
-            addBotMessage(`Unexpected response (not JSON):\n\n${text}`);
-            console.error('Unexpected response', ct, text);
+            addBotMessage(error);
         }
-    } catch (err) {
-        hideTypingIndicator();
-        addBotMessage(String(err));
-        console.error(err);
     }
-}
-
-
 });
