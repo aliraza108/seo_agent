@@ -1,4 +1,3 @@
-import os
 import ssl
 import socket
 import time
@@ -6,13 +5,10 @@ import random
 import asyncio
 from datetime import datetime
 from urllib.parse import urlparse, urljoin
-
 import httpx
-import uvicorn
 from bs4 import BeautifulSoup
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from mangum import Mangum
 from pydantic import BaseModel
 from agents import (
     function_tool,
@@ -21,34 +17,15 @@ from agents import (
     set_default_openai_api,
     set_tracing_disabled,
     AsyncOpenAI,
-    set_default_openai_client,
-    AgentHooks,
+    set_default_openai_client
 )
 
 
 
 history = []
-# Add CORS middleware
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
 
 
 
-
-# 2. Add CORS middleware
-# This allows your frontend (running on a different port) to communicate with your backend.
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],  # Allows all origins
-    allow_credentials=True,
-    allow_methods=["*"],  # Allows all methods
-    allow_headers=["*"],  # Allows all headers
-)
 
 # This ensures the data sent from the frontend has the correct structure.
 class ChatRequest(BaseModel):
@@ -591,10 +568,6 @@ async def chat_with_agent(request: ChatRequest):
         print(f"An error occurred: {e}")
         return {"reply": f"An unexpected error occurred: {e}"}
     
-    
-handler = Mangum(app)
-
-
 
 
 
