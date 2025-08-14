@@ -91,7 +91,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function getBotResponse(userMessage) {
         showTypingIndicator();
-        const apiUrl = 'http://localhost:8000/api/chat'; 
+        // Change this:
+        // const apiUrl = 'http://localhost:8000/api/chat';
+
+        // To this:
+        const apiUrl = '/api/chat';
 
         try {
             const response = await fetch(apiUrl, {
