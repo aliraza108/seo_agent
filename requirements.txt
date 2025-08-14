@@ -1,7 +1,6 @@
 fastapi
 openai-agents
 requests
-os
 beautifulsoup4
 httpx
 python-dotenv
