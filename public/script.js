@@ -92,10 +92,11 @@ document.addEventListener('DOMContentLoaded', () => {
     async function getBotResponse(userMessage) {
         showTypingIndicator();
         // Change this:
-        // const apiUrl = 'http://localhost:8000/api/chat';
+        const apiUrl = 'https://seo-agent-aav5pgtld-aliraza108s-projects.vercel.app';
 
         // To this:
-        const apiUrl = '/api/chat';
+        // const apiUrl = '/api/chat';
+        
 
         try {
             const response = await fetch(apiUrl, {
