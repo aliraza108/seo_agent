@@ -1,5 +1,3 @@
 {
-  "rewrites": [
-    { "source": "/api/chat", "destination": "/chat" }
-  ]
+  "version": 2
 }
