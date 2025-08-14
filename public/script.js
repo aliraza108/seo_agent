@@ -119,7 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (error) {
             console.error('Error fetching bot response:', error);
             hideTypingIndicator();
-            addBotMessage("Sorry, I'm having trouble connecting to my brain right now. Please check the server console and try again.");
+            addBotMessage(error);
         }
     }
 });
