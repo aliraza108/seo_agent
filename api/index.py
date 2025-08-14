@@ -557,10 +557,24 @@ Proceed to await the user’s input.
 )
 
     # result = Runner.run_streamed(agent, input='get Perormance_check of https://virtual-spark.vercel.app/ give me suggestions, performance of page for both, seo, score, and other things')
+# ... (imports remain the same)
 
+# Initialize the FastAPI app (only once)
+app = FastAPI()
 
-# 8. Define your API endpoint
-@app.post("/api/chat")
+# Add CORS middleware (only once)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# ... (rest of your code: models, tools, agent setup)
+
+# Updated endpoint
+@app.post("/chat")
 async def chat_with_agent(request: ChatRequest):
     print(f"Received message: {request.message}")
     try:

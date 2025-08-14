@@ -92,7 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function getBotResponse(userMessage) {
         showTypingIndicator();
         // Change this:
-        const apiUrl = 'https://seo-agent-aav5pgtld-aliraza108s-projects.vercel.app';
+        const apiUrl = '/api/chat';
 
         // To this:
         // const apiUrl = '/api/chat';
