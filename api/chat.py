@@ -26,11 +26,8 @@ class ChatRequest(BaseModel):
     message: str
 
 @app.get("/")
-async def info():
-    """
-    GET /api/chat  -> quick info so GET won't 404
-    """
-    return {"status": "ok", "note": "POST JSON {message: string} to this endpoint to chat."}
+def root():
+    return {"status": "ok"}
 
 async def call_google_gemini(message: str) -> str:
     if not API_KEY:
@@ -73,15 +70,7 @@ async def call_google_gemini(message: str) -> str:
 
     return str(data)
 
+
 @app.post("/")
-async def chat(payload: ChatRequest):
-    logger.info("POST /api/chat received (len=%d)", len(payload.message or ""))
-    try:
-        reply = await call_google_gemini(payload.message)
-        return {"reply": reply}
-    except RuntimeError as e:
-        logger.exception("Runtime error when calling Gemini")
-        raise HTTPException(status_code=502, detail=str(e))
-    except Exception as e:
-        logger.exception("Unexpected error")
-        raise HTTPException(status_code=500, detail="Internal server error")
+def chat():
+    return {"reply": "hi"}
