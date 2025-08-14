@@ -561,28 +561,55 @@ scrap_full_text]
 
 
 history = []
+from mangum import Mangum
+# ... your existing code ...
+handler = Mangum(app) # Add this line at the end of your file
+
+
+
 
 @app.post("/api/chat")
 async def chat_with_agent(request: ChatRequest):
     """
     This endpoint receives a message from the frontend, runs the agent,
-    and returns the agent's full response.
+    and returns the agent's final response.
     """
     print(f"Received message: {request.message}")
+
+    try:
+        # Await the Runner.run call
+        result = await Runner.run(agent, input=request.message)
+        # Assuming result.final_output exists and is a string
+        return {"reply": result.final_output}
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return {"reply": "Sorry, I'm having trouble connecting to my brain right now. Please check the server console and try again."}
+
+# The handler that Vercel needs to run your application
+handler = Mangum(app)
+
+# @app.post("/api/chat")
+# async def chat_with_agent(request: ChatRequest):
+#     """
+#     This endpoint receives a message from the frontend, runs the agent,
+#     and returns the agent's full response.
+#     """
+#     print(f"Received message: {request.message}")
     
-    # We create a simple history for each request.
-    history = [{"role": "user", "content": request.message}]
+#     # We create a simple history for each request.
+#     history = [{"role": "user", "content": request.message}]
     
-    full_response = ""
+#     full_response = ""
 
-    # 1. FIXED: Call the agent runner to get the 'result' stream.
-    result = await Runner.run(agent, input=history)
-    return {"reply": result.final_output}
+#     # 1. FIXED: Call the agent runner to get the 'result' stream.
+#     result = await Runner.run(agent, input=history)
+#     return {"reply": result.final_output}
 
 
-# This part is for local testing if you run the file directly,
-# but we will use uvicorn to run it in Codespaces.
-uvicorn.run(app, host="0.0.0.0", port=8000)
+# # This part is for local testing if you run the file directly,
+# # but we will use uvicorn to run it in Codespaces.
+
+# uvicorn.run(app, host="0.0.0.0", port=8000)
 
 
 
