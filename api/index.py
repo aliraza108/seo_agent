@@ -573,13 +573,13 @@ async def chat_with_agent(request: ChatRequest):
     print(f"Received message: {request.message}")
 
     try:
-        # Await the Runner.run call
-        result = await Runner.run(agent, input=request.message)
-        # Assuming result.final_output exists and is a string
+        history.append({"role": "user", "content": request.message})
+        result = await Runner.run(agent, input=history)
+        history.append({"role": "assistant", "content": result.final_output})
         return {"reply": result.final_output}
     except Exception as e:
         print(f"An error occurred: {e}")
-        return {"reply": "Sorry, I'm having trouble connecting to my brain right now. Please check the server console and try again."}
+        return {"reply": "llm not working ...."}
 
 # The handler that Vercel needs to run your application
 handler = Mangum(app)
