@@ -585,7 +585,9 @@ async def chat_with_agent(request: ChatRequest):
         return {"reply": f"An unexpected error occurred: {e}"}
 
 # The handler that Vercel needs to run your application
-handler = Mangum(app)
+# handler = Mangum(app)
+uvicorn.run(app, host="0.0.0.0", port=8000)
+
 
 
 
