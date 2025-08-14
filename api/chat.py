@@ -9,7 +9,7 @@ from pydantic import BaseModel
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("api.chat")
 
-API_KEY = os.getenv("GEMINI_API_KEY")             # set in Vercel
+API_KEY = 'AIzaSyBFHEfqKOdI9HMWLlQCQRs7OUnrCsIpn_E'          # set in Vercel
 MODEL = os.getenv("MODEL", "gemini-2.0-flash")
 GEMINI_BASE_URL = os.getenv("GEMINI_BASE_URL", "https://generativelanguage.googleapis.com")
 
