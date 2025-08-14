@@ -562,10 +562,6 @@ scrap_full_text]
 
 history = []
 from mangum import Mangum
-# ... your existing code ...
-handler = Mangum(app) # Add this line at the end of your file
-
-
 
 
 @app.post("/api/chat")
