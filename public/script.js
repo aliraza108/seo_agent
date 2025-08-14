@@ -89,46 +89,39 @@ document.addEventListener('DOMContentLoaded', () => {
         chatBox.scrollTop = chatBox.scrollHeight;
     }
 
-    // public/script.js (only the relevant part shown)
     async function getBotResponse(userMessage) {
-    showTypingIndicator();
-    const apiUrl = '/api/chat';
+        showTypingIndicator();
+        // Change this:
+        const apiUrl = 'api/chat';
 
-    try {
-        const response = await fetch(apiUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message: userMessage }),
-        });
+        // To this:
+        // const apiUrl = '/api/chat';
+        
 
-        const text = await response.text(); // read raw body
-        const contentType = response.headers.get('content-type') || '';
+        try {
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ message: userMessage }),
+            });
 
-        if (!response.ok) {
-            console.error('Server error:', response.status, response.statusText, text);
-            hideTypingIndicator();
-            addBotMessage(`Server error ${response.status}: ${response.statusText}\n\n${text}`);
-            return;
-        }
+            if (!response.ok) {
+                throw new Error(`Network response was not ok: ${response.status} ${response.statusText}`);
+            }
+            const data = await response.json();
+            const botReply = data.reply;
 
-        if (contentType.includes('application/json')) {
-            const data = JSON.parse(text);
-            const botReply = data.reply || JSON.stringify(data);
             hideTypingIndicator();
             addBotMessage(botReply.replace(/\n/g, '<br>'));
-        } else {
-            // Not JSON — display so you can debug (e.g. HTML auth page or other)
-            console.error('Expected JSON but got:', contentType, text);
+
+        } catch (error) {
+            console.error('Error fetching bot response:', error);
             hideTypingIndicator();
-            addBotMessage(`Unexpected response (not JSON):\n\n${text}`);
+            addBotMessage(error);
         }
 
-    } catch (err) {
-        console.error('Fetch failed:', err);
-        hideTypingIndicator();
-        addBotMessage(String(err));
+        
     }
-}
-
-
 });
