@@ -665,7 +665,8 @@ import time
 from urllib.parse import urlparse, urljoin
 from agents import function_tool, Runner, Agent, set_default_openai_api, set_tracing_disabled, AsyncOpenAI, set_default_openai_client, AgentHooks
 from mangum import Mangum
-
+from dotenv import load_dotenv
+load_dotenv()
 # Initialize the FastAPI app
 app = FastAPI()
 
