@@ -9,3 +9,4 @@ uvicorn
 mangum
 pydantic
 openai
+httpx[http2]

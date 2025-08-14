@@ -7,7 +7,7 @@ from datetime import datetime
 from urllib.parse import urlparse, urljoin
 import httpx
 from bs4 import BeautifulSoup
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from agents import (
@@ -19,6 +19,7 @@ from agents import (
     AsyncOpenAI,
     set_default_openai_client
 )
+
 
 
 
@@ -559,12 +560,70 @@ app.add_middleware(
 
 
 
-@app.post("/api/chat")  # <-- changed
+
+
+
+import logging
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+async def call_openai_chat(message: str) -> str:
+    """
+    Simple async call to OpenAI Chat Completions (v1).
+    Uses httpx for async requests. Adjust endpoint/model for your provider.
+    """
+    if not api_key:
+        raise RuntimeError("api_key not set in environment")
+
+    url = "https://api.openai.com/v1/chat/completions"
+    headers = {
+        "Authorization": f"Bearer {api_key}",
+        "Content-Type": "application/json",
+    }
+    payload = {
+        "model": MODEL,
+        "messages": [
+            {"role": "system", "content": "You are a helpful SEO assistant."},
+            {"role": "user", "content": message},
+        ],
+        "temperature": 0.2,
+        "max_tokens": 700,
+    }
+
+    async with httpx.AsyncClient(timeout=30.0) as client:
+        r = await client.post(url, headers=headers, json=payload)
+    if r.status_code >= 400:
+        logger.error("OpenAI error: %s %s", r.status_code, r.text)
+        raise RuntimeError(f"LLM request failed: {r.status_code} {r.text}")
+
+    data = r.json()
+    # defensive extraction
+    try:
+        return data["choices"][0]["message"]["content"].strip()
+    except Exception as e:
+        logger.exception("Failed to parse LLM response")
+        raise RuntimeError("Unexpected LLM response format")
+
+# Expose both routes so either '/chat' or '/api/chat' from frontend works.
+@app.post("/api/chat")
+@app.post("/chat")
 async def chat_with_agent(request: ChatRequest):
-    print(f"Received message: {request.message}")
-    return {"reply": f"Echo: {request.message}"}
+    logger.info("Received message: %s", request.message)
+    try:
+        # Example: simple echo if you want to test without LLM:
+        # return {"reply": f"Echo: {request.message}"}
+        reply = await call_openai_chat(request.message)
+        return {"reply": reply}
+    except Exception as e:
+        logger.exception("Error in chat endpoint")
+        # return structured error to frontend
+        raise HTTPException(status_code=500, detail=str(e))
 
 
+@app.get("/api/health")
+@app.get("/health")
+async def health():
+    return {"status": "ok"}
 
 
 
