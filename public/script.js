@@ -92,7 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function getBotResponse(userMessage) {
         showTypingIndicator();
         // Change this:
-        const apiUrl = 'http://0.0.0.0:7860/chat';
+        const apiUrl = 'https://seo-agent.aliraza108.hf.space/chat';
 
         // To this:
         // const apiUrl = '/api/chat';
