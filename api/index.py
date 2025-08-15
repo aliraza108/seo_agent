@@ -557,12 +557,6 @@ async def chat_with_agent(request: ChatRequest):
     This endpoint receives a message from the frontend, runs the agent,
     and returns the agent's full response.
     """
-    print(f"Received message: {request.message}")
-    
-    # We create a simple history for each request.
-    history = [{"role": "user", "content": request.message}]
-    
-    full_response = ""
 
     # 1. FIXED: Call the agent runner to get the 'result' stream.
     result = await Runner.run(agent, input=request.message)
