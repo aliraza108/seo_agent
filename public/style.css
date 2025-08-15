@@ -1208,3 +1208,30 @@ footer {
     scrollbar-width: none;
     -ms-overflow-style: none;
 }
+
+
+.social-icons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.social-icons a {
+    font-size: 1.5rem;
+    color: #555;
+    transition: color 0.3s ease, transform 0.2s ease;
+    text-decoration: none;
+}
+
+.social-icons a:hover {
+    color: #0077b5; /* Default LinkedIn blue */
+    transform: scale(1.2);
+}
+
+.developed-by {
+    text-align: center;
+    font-size: 0.9rem;
+    margin-top: 5px;
+    color: #777;
+}
