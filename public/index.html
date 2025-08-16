@@ -1,86 +1,76 @@
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI SEO Assistant</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AI SEO Assistant</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
 </head>
 <body>
+  <div class="main-container">
+    <!-- Chat Section -->
+    <div class="chat-container">
+      <header class="chat-header">
+        <h2><i class="fa-solid fa-robot"></i> AI SEO Assistant</h2>
+        <button id="clear-chat-btn" class="btn-clear">
+          <i class="fa-solid fa-arrows-rotate"></i> Clear
+        </button>
+      </header>
 
-    <div class="main-container">
-        <div class="chat-container">
-            <header class="chat-header">
-                <h2>AI SEO Assistant</h2>
-                <button id="clear-chat-btn" title="Clear Chat">
-                    <i class="fa-solid fa-arrows-rotate"></i> Clear Chat
-                </button>
-            </header>
+      <!-- Quick Actions -->
+      <div class="quick-actions">
+        <button class="action-btn"><i class="fa-solid fa-lightbulb"></i> Smart Insights</button>
+        <button class="action-btn"><i class="fa-solid fa-magnifying-glass"></i> Keyword Research</button>
+        <button class="action-btn"><i class="fa-solid fa-chart-line"></i> Performance Tips</button>
+        <button class="action-btn"><i class="fa-solid fa-wrench"></i> Technical Help</button>
+      </div>
 
-            <div class="quick-actions">
-                <button class="action-btn">
-                    <i class="fa-solid fa-lightbulb"></i>
-                    <span>Smart Insights</span>
-                </button>
-                <button class="action-btn">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                    <span>Keyword Research</span>
-                </button>
-                <button class="action-btn">
-                    <i class="fa-solid fa-chart-line"></i>
-                    <span>Performance Tips</span>
-                </button>
-                <button class="action-btn">
-                    <i class="fa-solid fa-wrench"></i>
-                    <span>Technical Help</span>
-                </button>
-            </div>
-
-            <div class="chat-box-wrapper">
-                <div id="chat-box">
-                    <div class="bot-message">
-                         <i class="fa-solid fa-robot"></i>
-                        <p>Hello! I'm your SEO Content Analyzer Agent equipped with expert-level content, metadata, and technical SEO analysis. I've already analyzed your page and I'm ready to help you optimize it. What would you like to know?</p>
-                    </div>
-                </div>
-            </div>
-
-            <form id="chat-form">
-                <input type="text" id="user-input" placeholder="Ask me anything about SEO optimization..." autocomplete="off" required>
-                <button type="submit" aria-label="Send Message">
-                    <i class="fas fa-paper-plane"></i>
-                </button>
-            </form>
+      <!-- Chat Box -->
+      <div class="chat-box-wrapper">
+        <div id="chat-box">
+          <div class="bot-message">
+            <i class="fa-solid fa-robot"></i>
+            <p>Hello! I'm your SEO Content Analyzer Agent. I’ve already analyzed your page and I’m ready to help. What would you like to know?</p>
+          </div>
         </div>
+      </div>
 
-        <aside class="sidebar">
-            <div class="sidebar-section">
-                <h3>Suggested Questions</h3>
-                <button class="suggestion-btn">How can I improve my heading structure?</button>
-                <button class="suggestion-btn">Why is my LCP score low?</button>
-                <button class="suggestion-btn">Generate 5 long-tail keyword variations</button>
-                <button class="suggestion-btn">What's the ideal meta description length?</button>
-                <button class="suggestion-btn">How do I fix missing structured data?</button>
-                <button class="suggestion-btn">Explain my technical SEO issues</button>
-            </div>
-            <div class="sidebar-section">
-                <h3>Quick SEO Tools</h3>
-                <button class="suggestion-btn tool-btn"><i class="fa-solid fa-tags"></i> Generate Meta Tags</button>
-                <button class="suggestion-btn tool-btn"><i class="fa-solid fa-key"></i> Keyword Suggestions</button>
-                <button class="suggestion-btn tool-btn"><i class="fa-solid fa-file-alt"></i> Content Analysis</button>
-                <button class="suggestion-btn tool-btn"><i class="fa-solid fa-bolt"></i> Speed Optimization</button>
-                <button class="suggestion-btn tool-btn"><i class="fa-solid fa-link"></i> Link Building Ideas</button>
-            </div>
-        </aside>
+      <!-- Input -->
+      <form id="chat-form">
+        <input type="text" id="user-input" placeholder="Ask me anything about SEO..." autocomplete="off" required/>
+        <button type="submit" aria-label="Send Message">
+          <i class="fas fa-paper-plane"></i>
+        </button>
+      </form>
     </div>
 
-    <script src="script.js"></script>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <!-- Hide on mobile -->
+      <div class="sidebar-section suggested">
+        <h3>Suggested Questions</h3>
+        <button class="suggestion-btn">How can I improve my heading structure?</button>
+        <button class="suggestion-btn">Why is my LCP score low?</button>
+        <button class="suggestion-btn">Generate 5 long-tail keyword variations</button>
+        <button class="suggestion-btn">What's the ideal meta description length?</button>
+        <button class="suggestion-btn">How do I fix missing structured data?</button>
+        <button class="suggestion-btn">Explain my technical SEO issues</button>
+      </div>
+
+      <div class="sidebar-section">
+        <h3>Quick SEO Tools</h3>
+        <button class="suggestion-btn tool-btn"><i class="fa-solid fa-tags"></i> Generate Meta Tags</button>
+        <button class="suggestion-btn tool-btn"><i class="fa-solid fa-key"></i> Keyword Suggestions</button>
+        <button class="suggestion-btn tool-btn"><i class="fa-solid fa-file-alt"></i> Content Analysis</button>
+        <button class="suggestion-btn tool-btn"><i class="fa-solid fa-bolt"></i> Speed Optimization</button>
+        <button class="suggestion-btn tool-btn"><i class="fa-solid fa-link"></i> Link Building Ideas</button>
+      </div>
+    </aside>
+  </div>
+  <script src="script.js"></script>
 </body>
 </html>

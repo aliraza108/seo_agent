@@ -240,22 +240,3 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
-document.addEventListener('DOMContentLoaded', () => {
-  const chatForm = document.getElementById('chat-form');
-  const sidebar = document.querySelector('.sidebar');
-  const chatContainer = document.querySelector('.chat-container');
-
-  chatForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    
-    // hide sidebar after first message
-    if (sidebar) {
-      sidebar.style.display = 'none';
-    }
-
-    // expand chat height
-    if (chatContainer) {
-      chatContainer.style.height = "calc(100vh - 50px)";
-    }
-  });
-});
