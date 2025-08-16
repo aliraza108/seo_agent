@@ -127,9 +127,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const chatBox = document.getElementById('chat-box');
     const clearChatBtn = document.getElementById('clear-chat-btn');
     const suggestionBtns = document.querySelectorAll('.suggestion-btn');
-    const initialBotMessage = chatBox.innerHTML; // Store the initial welcome message
+    const initialBotMessage = chatBox.innerHTML;
 
-    // Event listener for the main chat form submission
+    // ✅ Added references for hiding suggestions and expanding container
+    const quickActions = document.querySelector('.quick-actions');
+    const chatContainer = document.querySelector('.chat-container');
+    let firstMessageSent = false;
+
     chatForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const userMessage = userInput.value.trim();
@@ -137,22 +141,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
         addUserMessage(userMessage);
         userInput.value = '';
-        
+
+        // ✅ Hide quick actions after first message
+        if (!firstMessageSent) {
+            if (quickActions) {
+                quickActions.style.display = 'none';
+            }
+            chatContainer.classList.add('expanded');
+            firstMessageSent = true;
+        }
+
         await getBotResponse(userMessage);
     });
 
-    // Event listener for the "Clear Chat" button
     clearChatBtn.addEventListener('click', () => {
         chatBox.innerHTML = initialBotMessage;
+        firstMessageSent = false;
+
+        // ✅ Restore quick actions when chat is cleared
+        if (quickActions) {
+            quickActions.style.display = 'flex';
+        }
+        chatContainer.classList.remove('expanded');
     });
 
-    // Event listener for all suggestion buttons in the sidebar
     suggestionBtns.forEach(btn => {
         btn.addEventListener('click', () => {
-            // Extract text, ignoring the icon if it exists
             const suggestion = btn.textContent.trim();
             userInput.value = suggestion;
-            // Automatically submit the form with the suggested question
             chatForm.dispatchEvent(new Event('submit', { cancelable: true }));
         });
     });
@@ -168,7 +184,6 @@ document.addEventListener('DOMContentLoaded', () => {
     function addBotMessage(message) {
         const messageElement = document.createElement('div');
         messageElement.classList.add('bot-message');
-        // Added the robot icon to bot messages
         messageElement.innerHTML = `<i class="fa-solid fa-robot"></i><p>${message}</p>`;
         chatBox.appendChild(messageElement);
         scrollToBottom();
