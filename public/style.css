@@ -1165,6 +1165,7 @@ body::after { width: 600px; height: 600px; bottom: -150px; right: -200px; backgr
 @media (max-width: 768px) {
   .suggestions,
   .seo-tools,
+  .quick-actions
   .sidebar {
     display: none !important;
   }
