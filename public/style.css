@@ -1,957 +1,5 @@
 /* --- CSS Variables and Basic Setup --- */
 :root {
-    --bg-color: #0B0910;
-    --text-color: #EAE8F0;
-    --primary-accent: #FFD60A;
-    --input-bg: rgba(255, 255, 255, 0.05);
-    --border-color: rgba(255, 255, 255, 0.1);
-    --bot-message-bg: rgba(255, 255, 255, 0.08);
-}
-
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
-body {
-    font-family: 'Inter', sans-serif;
-    background-color: var(--bg-color);
-    color: var(--text-color);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-height: 100vh;
-    padding: 20px;
-    position: relative;
-    overflow-x: hidden;
-}
-
-/* --- Aurora Gradient Background Effect --- */
-body::before {
-    content: '';
-    position: absolute;
-    top: -20%;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 800px;
-    height: 600px;
-    background: radial-gradient(circle, rgba(255, 214, 10, 0.3), rgba(255, 214, 10, 0) 60%),
-                radial-gradient(circle at top left, rgba(188, 11, 230, 0.3), rgba(188, 11, 230, 0) 70%),
-                radial-gradient(circle at bottom right, rgba(255, 71, 107, 0.2), rgba(255, 71, 107, 0) 70%);
-    filter: blur(150px);
-    z-index: -1;
-    animation: pulse 15s infinite alternate;
-}
-
-@keyframes pulse {
-    0% { transform: translateX(-50%) scale(1); opacity: 0.8; }
-    100% { transform: translateX(-45%) scale(1.2); opacity: 1; }
-}
-
-
-/* --- Header & Navigation --- */
-header {
-    width: 100%;
-    max-width: 1200px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px 0;
-    margin-bottom: 40px;
-}
-
-.logo {
-    width: 100px; /* Placeholder for logo */
-    height: 40px;
-    border: 2px dashed var(--border-color);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 14px;
-    color: var(--text-color);
-    border-radius: 8px;
-}
-.logo::after {
-    content: 'LOGO';
-}
-
-header nav {
-    display: flex;
-    gap: 30px;
-}
-
-header nav a, .header-buttons .login-btn {
-    text-decoration: none;
-    color: var(--text-color);
-    font-weight: 500;
-    transition: color 0.2s;
-}
-
-header nav a:hover, .header-buttons .login-btn:hover {
-    color: var(--primary-accent);
-}
-
-.header-buttons {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-}
-
-.cta-button {
-    background-color: var(--primary-accent);
-    color: var(--bg-color);
-    border: none;
-    padding: 10px 20px;
-    border-radius: 8px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: transform 0.2s;
-}
-
-.cta-button:hover {
-    transform: scale(1.05);
-}
-
-
-/* --- Main Content & Headings --- */
-main {
-    text-align: center;
-    width: 100%;
-    max-width: 800px;
-    flex-grow: 1;
-}
-
-.hero-content {
-    margin-bottom: 30px;
-}
-
-.main-heading {
-    font-size: 48px;
-    font-weight: 700;
-    color: var(--text-color);
-}
-
-.highlight-heading {
-    font-size: 48px;
-    font-weight: 700;
-    color: var(--primary-accent);
-    margin-top: -10px;
-}
-
-/* --- Chat Interface --- */
-.chat-wrapper {
-    margin-bottom: 1px;
-}
-
-
-
-#chat-box {
-    width: 100%;
-    height: auto;
-    overflow-y: auto;
-    margin-bottom: 20px;
-    padding: 10px;
-    text-align: left;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.bot-message, .user-message {
-    padding: 12px 18px;
-    border-radius: 12px;
-    max-width: 85%;
-    line-height: 1.6;
-}
-.bot-message p, .user-message p {
-    margin: 0;
-}
-.bot-message {
-    background-color: var(--bot-message-bg);
-    align-self: flex-start;
-    border-bottom-left-radius: 2px;
-}
-
-.user-message {
-    background-color: var(--primary-accent);
-    color: var(--bg-color);
-    align-self: flex-end;
-    border-bottom-right-radius: 2px;
-}
-
-#chat-form {
-    display: flex;
-    width: 100%;
-    position: relative;
-}
-
-#user-input {
-    flex-grow: 1;
-    background-color: var(--input-bg);
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
-    padding: 18px 60px 18px 20px;
-    font-size: 16px;
-    color: var(--text-color);
-    outline: none;
-    transition: border-color 0.2s;
-}
-
-#user-input:focus {
-    border-color: var(--primary-accent);
-}
-
-#chat-form button {
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    background-color: var(--primary-accent);
-    border: none;
-    width: 40px;
-    height: 40px;
-    border-radius: 8px;
-    color: var(--bg-color);
-    font-size: 18px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: transform 0.2s;
-}
-
-#chat-form button:hover {
-    transform: translateY(-50%) scale(1.1);
-}
-
-.suggestion-chips {
-    margin-top: 15px;
-    text-align: left;
-}
-
-.chip {
-    background: var(--input-bg);
-    border: 1px solid var(--border-color);
-    color: var(--text-color);
-    padding: 8px 15px;
-    border-radius: 20px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: background-color 0.2s;
-}
-.chip:hover {
-    background-color: var(--bot-message-bg);
-}
-
-/* --- Features Section --- */
-.features-section {
-    margin-bottom: 40px;
-}
-
-.features-section h2 {
-    font-weight: 500;
-    font-size: 16px;
-    color: #a09da8;
-    margin-bottom: 20px;
-}
-
-.features-grid {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    flex-wrap: wrap;
-}
-
-.feature-box {
-    background-color: var(--input-bg);
-    border: 1px solid var(--border-color);
-    padding: 15px 20px;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-weight: 500;
-    transition: background-color 0.2s;
-}
-.feature-box i {
-    color: var(--primary-accent);
-}
-
-/* --- Footer Counter --- */
-footer {
-    padding: 20px 0;
-}
-.counter {
-    color: #a09da8;
-    font-size: 14px;
-}
-
-/* --- Responsive Design --- */
-@media (max-width: 768px) {
-    body { padding: 15px; }
-    header nav { display: none; }
-    .main-heading, .highlight-heading { font-size: 36px; }
-    .features-grid { display: grid; grid-template-columns: 1fr 1fr; }
-}
-
-
-/* --- Base Styles for Hiding the Scrollbar --- */
-
-/* For Webkit browsers (Chrome, Safari) */
-#chat-box::-webkit-scrollbar {
-    display: none;
-}
-
-/* For Firefox */
-#chat-box {
-    scrollbar-width: none;
-}
-
-/* For Internet Explorer and older Edge */
-#chat-box {
-    -ms-overflow-style: none;
-}
-
-/* Ensure the chat box itself has scrolling enabled */
-#chat-box {
-    overflow-y: auto;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* --- Root Variables --- */
-:root {
-    --bg-color: #0B0910;
-    --text-color: #EAE8F0;
-    --primary-accent: #FFD60A;
-    --input-bg: rgba(255, 255, 255, 0.05);
-    --border-color: rgba(255, 255, 255, 0.1);
-    --bot-message-bg: rgba(255, 255, 255, 0.08);
-}
-
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
-body {
-    font-family: 'Inter', sans-serif;
-    background-color: var(--bg-color);
-    color: var(--text-color);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-height: 100vh;
-    padding: 20px;
-    position: relative;
-    overflow-x: hidden;
-}
-
-/* --- Aurora Gradient Background Effect --- */
-body::before {
-    content: '';
-    position: absolute;
-    top: -20%;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 800px;
-    height: 600px;
-    background: radial-gradient(circle, rgba(255, 214, 10, 0.3), rgba(176, 176, 174, 0) 60%),
-                radial-gradient(circle at top left, rgba(188, 11, 230, 0.3), rgba(188, 11, 230, 0) 70%),
-                radial-gradient(circle at bottom right, rgba(255, 71, 107, 0.2), rgba(255, 71, 107, 0) 70%);
-    filter: blur(150px);
-    z-index: -1;
-    animation: pulse 15s infinite alternate;
-}
-
-@keyframes pulse {
-    0% { transform: translateX(-50%) scale(1); opacity: 0.8; }
-    100% { transform: translateX(-45%) scale(1.2); opacity: 1; }
-}
-
-
-/* --- Header & Navigation --- */
-header {
-    width: 100%;
-    max-width: 1200px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px 0;
-    margin-bottom: 40px;
-}
-
-.logo {
-    width: 100px; /* Placeholder for logo */
-    height: 40px;
-    border: 2px dashed var(--border-color);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 14px;
-    color: var(--text-color);
-    border-radius: 8px;
-}
-.logo::after {
-    content: 'LOGO';
-}
-
-header nav {
-    display: flex;
-    gap: 30px;
-}
-
-header nav a, .header-buttons .login-btn {
-    text-decoration: none;
-    color: var(--text-color);
-    font-weight: 500;
-    transition: color 0.2s;
-}
-
-header nav a:hover, .header-buttons .login-btn:hover {
-    color: var(--primary-accent);
-}
-
-.header-buttons {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-}
-
-.cta-button {
-    background-color: var(--primary-accent);
-    color: var(--bg-color);
-    border: none;
-    padding: 10px 20px;
-    border-radius: 8px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: transform 0.2s;
-}
-
-.cta-button:hover {
-    transform: scale(1.05);
-}
-
-
-/* --- Main Content & Headings --- */
-main {
-    text-align: center;
-    width: 100%;
-    max-width: 800px;
-    flex-grow: 1;
-    display: flex; /* Added for layout */
-    flex-direction: column; /* Added for layout */
-    justify-content: space-between; /* Added for layout */
-}
-
-.hero-content {
-    margin-bottom: 30px;
-}
-
-.main-heading {
-    font-size: 48px;
-    font-weight: 700;
-    color: var(--text-color);
-}
-
-.highlight-heading {
-    font-size: 48px;
-    font-weight: 700;
-    color: var(--primary-accent);
-    margin-top: -10px;
-}
-
-/* --- Chat Interface --- */
-.chat-wrapper {
-    flex-grow: 1; /* Allows the chat wrapper to take up space */
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    padding-bottom: 20px; /* Add padding at the bottom for spacing */
-}
-
-#chat-box {
-    width: 100%;
-    height: auto;
-    overflow-y: auto;
-    margin-bottom: 20px;
-    padding: 10px;
-    text-align: left;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.bot-message, .user-message {
-    padding: 12px 18px;
-    border-radius: 12px;
-    max-width: 85%;
-    line-height: 1.6;
-}
-.bot-message p, .user-message p {
-    margin: 0;
-}
-.bot-message {
-    background-color: var(--bot-message-bg);
-    align-self: flex-start;
-    border-bottom-left-radius: 2px;
-}
-
-.user-message {
-    background-color: var(--primary-accent);
-    color: var(--bg-color);
-    align-self: flex-end;
-    border-bottom-right-radius: 2px;
-}
-
-#chat-form {
-    display: flex;
-    width: 100%;
-    position: relative;
-    /* Added transition for the smooth movement */
-    transition: all 0.5s ease-in-out; 
-}
-
-#user-input {
-    flex-grow: 1;
-    background-color: var(--input-bg);
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
-    padding: 18px 60px 18px 20px;
-    font-size: 16px;
-    color: var(--text-color);
-    outline: none;
-    transition: border-color 0.2s;
-    position: relative;
-}
-
-#user-input:focus {
-    border-color: var(--primary-accent);
-}
-
-#chat-form button {
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    background-color: var(--primary-accent);
-    border: none;
-    width: 40px;
-    height: 40px;
-    border-radius: 8px;
-    color: var(--bg-color);
-    font-size: 18px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: transform 0.2s;
-}
-
-#chat-form button:hover {
-    transform: translateY(-50%) scale(1.1);
-}
-
-.suggestion-chips {
-    margin-top: 15px;
-    text-align: left;
-}
-
-.chip {
-    background: var(--input-bg);
-    border: 1px solid var(--border-color);
-    color: var(--text-color);
-    padding: 8px 15px;
-    border-radius: 20px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: background-color 0.2s;
-}
-.chip:hover {
-    background-color: var(--bot-message-bg);
-}
-
-/* --- Features Section --- */
-.features-section {
-    margin-bottom: 40px;
-}
-
-.features-section h2 {
-    font-weight: 500;
-    font-size: 16px;
-    color: #a09da8;
-    margin-bottom: 20px;
-}
-
-.features-grid {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    flex-wrap: wrap;
-}
-
-.feature-box {
-    background-color: var(--input-bg);
-    border: 1px solid var(--border-color);
-    padding: 15px 20px;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-weight: 500;
-    transition: background-color 0.2s;
-}
-.feature-box i {
-    color: var(--primary-accent);
-}
-
-/* --- Footer Counter --- */
-footer {
-    padding: 20px 0;
-}
-.counter {
-    color: #a09da8;
-    font-size: 14px;
-}
-
-/* --- Responsive Design --- */
-@media (max-width: 768px) {
-    body { padding: 15px; }
-    header nav { display: none; }
-    .main-heading, .highlight-heading { font-size: 36px; }
-    .features-grid { display: grid; grid-template-columns: 1fr 1fr; }
-}
-
-
-/* --- Base Styles for Hiding the Scrollbar --- */
-
-/* For Webkit browsers (Chrome, Safari) */
-#chat-box::-webkit-scrollbar {
-    display: none;
-}
-
-/* For Firefox */
-#chat-box {
-    scrollbar-width: none;
-}
-
-/* For Internet Explorer and older Edge */
-#chat-box {
-    -ms-overflow-style: none;
-}
-
-/* Ensure the chat box itself has scrolling enabled */
-#chat-box {
-    overflow-y: auto;
-}
-
-
-
-
-
-/* --- CSS Variables and Basic Setup --- */
-:root {
-    --bg-color: #0B0910;
-    --text-color: #EAE8F0;
-    --primary-accent: #FFD60A;
-    --input-bg: rgba(255, 255, 255, 0.05);
-    --border-color: rgba(255, 255, 255, 0.1);
-    --bot-message-bg: rgba(255, 255, 255, 0.08);
-}
-
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
-html, body {
-    height: 100%; /* Crucial: Make html and body fill the entire viewport height */
-    min-height: 100vh;
-}
-
-body {
-    font-family: 'Inter', sans-serif;
-    background-color: var(--bg-color);
-    color: var(--text-color);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: relative;
-    overflow-x: hidden;
-}
-
-/* --- Aurora Gradient Background Effect --- */
-body::before {
-    content: '';
-    position: absolute;
-    top: -20%;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 800px;
-    height: 600px;
-    background: radial-gradient(circle, rgba(255, 214, 10, 0.3), rgba(255, 214, 10, 0) 60%),
-                radial-gradient(circle at top left, rgba(188, 11, 230, 0.3), rgba(188, 11, 230, 0) 70%),
-                radial-gradient(circle at bottom right, rgba(255, 71, 107, 0.2), rgba(255, 71, 107, 0) 70%);
-    filter: blur(150px);
-    z-index: -1;
-    animation: pulse 15s infinite alternate;
-}
-
-@keyframes pulse {
-    0% { transform: translateX(-50%) scale(1); opacity: 0.8; }
-    100% { transform: translateX(-45%) scale(1.2); opacity: 1; }
-}
-
-
-/* --- Main Content & Headings --- */
-main {
-    text-align: center;
-    width: 100%;
-    max-width: 800px;
-    flex-grow: 1; /* Makes 'main' fill all available vertical space */
-    display: flex;
-    flex-direction: column;
-    padding: 20px 0;
-}
-
-.hero-content {
-    margin-bottom: 30px;
-}
-
-.main-heading {
-    font-size: 48px;
-    font-weight: 700;
-    color: var(--text-color);
-}
-
-.highlight-heading {
-    font-size: 48px;
-    font-weight: 700;
-    color: var(--primary-accent);
-    margin-top: -10px;
-}
-
-/* --- Chat Interface --- */
-.chat-wrapper {
-    flex-grow: 1; /* Makes '.chat-wrapper' expand inside 'main' */
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end; /* Pushes content to the bottom (like input form) */
-    padding-bottom: 20px;
-    min-height: 0; /* Important for nested flex items to not overflow */
-}
-
-#chat-box {
-    flex-grow: 1; /* **THIS IS THE KEY**: Allows chat history to fill remaining space */
-    overflow-y: auto; /* Enables vertical scrolling for messages */
-    height: 0; /* Important: Tells flex item to start from minimal height before growing */
-
-    width: 100%;
-    padding: 10px;
-    text-align: left;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    margin-bottom: 20px; /* Space between chat box and input form */
-}
-
-.bot-message, .user-message {
-    padding: 12px 18px;
-    border-radius: 12px;
-    max-width: 85%;
-    line-height: 1.6;
-}
-.bot-message p, .user-message p {
-    margin: 0;
-}
-.bot-message {
-    background-color: var(--bot-message-bg);
-    align-self: flex-start;
-    border-bottom-left-radius: 2px;
-}
-
-.user-message {
-    background-color: var(--primary-accent);
-    color: var(--bg-color);
-    align-self: flex-end;
-    border-bottom-right-radius: 2px;
-}
-
-#chat-form {
-    display: flex;
-    width: 100%;
-    position: relative;
-    /* transition: all 0.5s ease-in-out; - Keep this if you want transition on form movement */
-}
-
-#user-input {
-    flex-grow: 1;
-    background-color: var(--input-bg);
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
-    padding: 18px 60px 18px 20px;
-    font-size: 16px;
-    color: var(--text-color);
-    outline: none;
-    transition: border-color 0.2s;
-}
-
-#user-input:focus {
-    border-color: var(--primary-accent);
-}
-
-#chat-form button {
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    background-color: var(--primary-accent);
-    border: none;
-    width: 40px;
-    height: 40px;
-    border-radius: 8px;
-    color: var(--bg-color);
-    font-size: 18px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: transform 0.2s;
-}
-
-#chat-form button:hover {
-    transform: translateY(-50%) scale(1.1);
-}
-
-.suggestion-chips {
-    margin-top: 15px;
-    text-align: left;
-}
-
-.chip {
-    background: var(--input-bg);
-    border: 1px solid var(--border-color);
-    color: var(--text-color);
-    padding: 8px 15px;
-    border-radius: 20px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: background-color 0.2s;
-}
-.chip:hover {
-    background-color: var(--bot-message-bg);
-}
-
-/* --- Features Section (will be hidden by JS) --- */
-.features-section {
-    margin-bottom: 40px;
-}
-
-.features-section h2 {
-    font-weight: 500;
-    font-size: 16px;
-    color: #a09da8;
-    margin-bottom: 20px;
-}
-
-.features-grid {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    flex-wrap: wrap;
-}
-
-.feature-box {
-    background-color: var(--input-bg);
-    border: 1px solid var(--border-color);
-    padding: 15px 20px;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-weight: 500;
-    transition: background-color 0.2s;
-}
-.feature-box i {
-    color: var(--primary-accent);
-}
-
-/* --- Footer Counter (will be hidden by JS) --- */
-footer {
-    padding: 20px 0;
-}
-.counter {
-    color: #a09da8;
-    font-size: 14px;
-}
-
-/* --- Responsive Design --- */
-@media (max-width: 768px) {
-    body { padding: 15px; }
-    header nav { display: none; }
-    .main-heading, .highlight-heading { font-size: 36px; }
-    .features-grid { display: grid; grid-template-columns: 1fr 1fr; }
-}
-
-
-/* --- Base Styles for Hiding the Scrollbar --- */
-#chat-box::-webkit-scrollbar {
-    display: none;
-}
-#chat-box {
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* --- CSS Variables and Basic Setup --- */
-:root {
     --bg-color: #FFFFFF;
     --text-color: #1a1a1a;
     --primary-accent: #FFD60A;
@@ -980,44 +28,47 @@ body {
     align-items: center;
     position: relative;
     overflow-x: hidden;
+    padding: 20px;
 }
 
-/* --- Aurora Gradient Background Effect --- */
+/* --- Colorful Large Background Circles (Enhanced Aurora Effect) --- */
 body::before {
     content: '';
     position: absolute;
-    top: -20%;
+    top: -10%;
     left: 50%;
     transform: translateX(-50%);
-    width: 800px;
-    height: 600px;
-    background: radial-gradient(circle, rgba(255, 214, 10, 0.2), rgba(255, 214, 10, 0) 60%),
-                radial-gradient(circle at top left, rgba(188, 11, 230, 0.2), rgba(188, 11, 230, 0) 70%),
-                radial-gradient(circle at bottom right, rgba(255, 71, 107, 0.1), rgba(255, 71, 107, 0) 70%);
-    filter: blur(150px);
+    width: 1200px;
+    height: 800px;
+    background: 
+        radial-gradient(circle, rgba(255, 214, 10, 0.4), rgba(255, 214, 10, 0) 50%),
+        radial-gradient(circle at top left, rgba(188, 11, 230, 0.4), rgba(188, 11, 230, 0) 60%),
+        radial-gradient(circle at bottom right, rgba(255, 71, 107, 0.3), rgba(255, 71, 107, 0) 60%),
+        radial-gradient(circle at bottom left, rgba(0, 255, 0, 0.3), rgba(0, 255, 0, 0) 60%),
+        radial-gradient(circle at top right, rgba(0, 123, 255, 0.3), rgba(0, 123, 255, 0) 60%);
+    filter: blur(200px);
     z-index: -1;
     animation: pulse 15s infinite alternate;
 }
 
 @keyframes pulse {
-    0% { transform: translateX(-50%) scale(1); opacity: 0.8; }
-    100% { transform: translateX(-45%) scale(1.2); opacity: 1; }
+    0% { transform: translateX(-50%) scale(1); opacity: 0.7; }
+    100% { transform: translateX(-45%) scale(1.1); opacity: 1; }
 }
-
 
 /* --- Main Content & Headings --- */
 main {
     text-align: center;
     width: 100%;
     max-width: 800px;
-    flex-grow: 1; 
+    flex-grow: 1;
     display: flex;
     flex-direction: column;
-    padding: 0; 
+    padding: 0;
 }
 
 .hero-content {
-    margin-bottom: 30px;
+    margin-bottom: 20px; /* Reduced margin for less gap */
 }
 
 .main-heading {
@@ -1035,25 +86,26 @@ main {
 
 /* --- Chat Interface --- */
 .chat-wrapper {
-    flex-grow: 1; 
+    flex-grow: 1;
     display: flex;
     flex-direction: column;
-    justify-content: flex-end; 
+    justify-content: flex-end;
     padding-bottom: 0;
-    min-height: 0; 
+    min-height: 0;
+    margin-bottom: 10px; /* Reduced bottom margin */
 }
 
 #chat-box {
-    flex-grow: 1; 
-    overflow-y: auto; 
-    height: 0; 
+    flex-grow: 1;
+    overflow-y: auto;
+    height: 0;
     width: 100%;
     padding: 10px;
     text-align: left;
     display: flex;
     flex-direction: column;
     gap: 15px;
-    margin-bottom: 20px; 
+    margin-bottom: 10px; /* Reduced margin */
 }
 
 .bot-message, .user-message {
@@ -1062,9 +114,11 @@ main {
     max-width: 85%;
     line-height: 1.6;
 }
+
 .bot-message p, .user-message p {
     margin: 0;
 }
+
 .bot-message {
     background-color: var(--bot-message-bg);
     align-self: flex-start;
@@ -1083,7 +137,6 @@ main {
     display: flex;
     width: 100%;
     position: relative;
-    /* transition: all 0.5s ease-in-out; - Keep this if you want transition on form movement */
 }
 
 #user-input {
@@ -1129,35 +182,16 @@ main {
     transform: translateY(-50%) scale(1.1);
 }
 
-.suggestion-chips {
-    margin-top: 15px;
-    text-align: left;
-}
-
-.chip {
-    background: var(--input-bg);
-    border: 1px solid var(--border-color);
-    color: var(--text-color);
-    padding: 8px 15px;
-    border-radius: 20px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: background-color 0.2s;
-}
-.chip:hover {
-    background-color: var(--bot-message-bg);
-}
-
-/* --- Features Section (will be hidden by JS) --- */
+/* --- Features Section --- */
 .features-section {
-    margin-bottom: 40px;
+    margin-bottom: 20px; /* Reduced margin */
 }
 
-.features-section h2 {
-    font-weight: 500;
-    font-size: 16px;
-    color: #a0a0a0;
-    margin-bottom: 20px;
+.features-heading {
+    font-weight: 600;
+    font-size: 24px;
+    color: var(--text-color);
+    margin-bottom: 15px;
 }
 
 .features-grid {
@@ -1176,40 +210,32 @@ main {
     align-items: center;
     gap: 10px;
     font-weight: 500;
-    transition: background-color 0.2s;
-}
-.feature-box i {
-    color: var(--primary-accent);
+    transition: background-color 0.2s, transform 0.2s, box-shadow 0.2s;
+    cursor: default;
 }
 
-/* --- Footer Counter (will be hidden by JS) --- */
-footer {
-    padding: 20px 0;
+.feature-box:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
+
+.feature-box i {
+    color: var(--primary-accent);
+    font-size: 1.2em;
+}
+
+/* --- Footer Counter --- */
+footer {
+    padding: 10px 0; /* Reduced padding */
+}
+
 .counter {
     color: #a0a0a0;
     font-size: 14px;
 }
 
-/* --- Responsive Design --- */
-@media (max-width: 768px) {
-    body { padding: 15px; }
-    header nav { display: none; }
-    .main-heading, .highlight-heading { font-size: 36px; }
-    .features-grid { display: grid; grid-template-columns: 1fr 1fr; }
-}
-
-
-/* --- Base Styles for Hiding the Scrollbar --- */
-#chat-box::-webkit-scrollbar {
-    display: none;
-}
-#chat-box {
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-}
-
-
+/* --- Social Icons and Developed By --- */
 .social-icons {
     display: flex;
     justify-content: center;
@@ -1225,8 +251,23 @@ footer {
 }
 
 .social-icons a:hover {
-    color: #0077b5; /* Default LinkedIn blue */
     transform: scale(1.2);
+}
+
+.social-icons a[title="LinkedIn"]:hover {
+    color: #0077b5;
+}
+
+.social-icons a[title="Facebook"]:hover {
+    color: #1877f2;
+}
+
+.social-icons a[title="WhatsApp"]:hover {
+    color: #25d366;
+}
+
+.social-icons a[title="GitHub"]:hover {
+    color: #333;
 }
 
 .developed-by {
@@ -1234,4 +275,69 @@ footer {
     font-size: 0.9rem;
     margin-top: 5px;
     color: #777;
+}
+
+/* --- Base Styles for Hiding the Scrollbar --- */
+#chat-box::-webkit-scrollbar {
+    display: none;
+}
+
+#chat-box {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+/* --- Responsive Design --- */
+@media (max-width: 768px) {
+    body {
+        padding: 15px;
+    }
+
+    .main-heading, .highlight-heading {
+        font-size: 36px;
+    }
+
+    .features-heading {
+        font-size: 20px;
+    }
+
+    .features-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    .hero-content {
+        margin-bottom: 15px;
+    }
+
+    #chat-box {
+        margin-bottom: 15px;
+    }
+
+    .features-section {
+        margin-bottom: 15px;
+    }
+
+    footer {
+        padding: 10px 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .features-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .main-heading, .highlight-heading {
+        font-size: 28px;
+    }
+
+    .features-heading {
+        font-size: 18px;
+    }
+
+    body {
+        padding: 10px;
+    }
 }
