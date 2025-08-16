@@ -92,7 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function getBotResponse(userMessage) {
         showTypingIndicator();
         // Change this:
-        const apiUrl = 'https://seo-agent-fastapi.vercel.app/api/chat';
+        const apiUrl = 'https://seo-agent-fastapi.vercel.app/chat';
 
         // To this:
         // const apiUrl = '/api/chat';
