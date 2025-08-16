@@ -55,7 +55,7 @@
         }
 
         .nav-menu a {
-            color: #333;
+            color: #333
             text-decoration: none;
             opacity: 0.8;
             transition: opacity 0.3s;
@@ -103,19 +103,23 @@
         .chat-input-wrapper {
             background: linear-gradient(135deg, rgba(255, 215, 0, 0.1) 0%, rgba(255, 165, 0, 0.1) 30%, rgba(147, 112, 219, 0.1) 70%, rgba(138, 43, 226, 0.1) 100%);
             border-radius: 20px;
+            
             padding: 8px;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
             backdrop-filter: blur(10px);
             border: 2px solid;
             border-image: linear-gradient(135deg, rgba(255, 215, 0, 0.3) 0%, rgba(255, 165, 0, 0.3) 30%, rgba(147, 112, 219, 0.3) 70%, rgba(138, 43, 226, 0.3) 100%) 1;
             position: relative;
+
+            border: none;
+            outline: none;
         }
 
         .chat-input-wrapper::before {
             content: '';
             position: absolute;
             inset: 0;
-            padding: 2px;
+            padding: 5px;
             background: linear-gradient(135deg, rgba(255, 215, 0, 0.4) 0%, rgba(255, 165, 0, 0.4) 30%, rgba(147, 112, 219, 0.4) 70%, rgba(138, 43, 226, 0.4) 100%);
             border-radius: inherit;
             mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
@@ -263,14 +267,17 @@
         }
 
         .chat-header {
-            background: #FFA500; /* Improved: Brighter, matching theme colors */
-            color: #333; /* Improved: Better contrast with bright background */
             padding: 20px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            background: linear-gradient(135deg, rgba(226, 214, 147, 0.1) 0%, rgba(255, 165, 0, 0.1) 30%, rgba(147, 112, 219, 0.1) 70%, rgba(138, 43, 226, 0.1) 100%);
+            border: 2px solid;
+            border-image: linear-gradient(135deg, rgba(223, 190, 0, 0.3) 0%, rgba(151, 98, 0, 0.3) 30%, rgba(147, 112, 219, 0.3) 70%, rgba(152, 65, 234, 0.3) 100%) 1;
         }
+
+
 
         .chat-title {
             font-size: 18px;
@@ -314,7 +321,7 @@
             width: 32px;
             height: 32px;
             border-radius: 50%;
-            background: linear-gradient(45deg, #FFD700, #FFA500); /* Improved: Matching theme */
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1) 0%, rgba(255, 165, 0, 0.1) 30%, rgba(147, 112, 219, 0.1) 70%, rgba(138, 43, 226, 0.1) 100%);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -325,7 +332,6 @@
         }
 
         .message.user .message-avatar {
-            background: linear-gradient(45deg, #667eea, #764ba2);
         }
 
         .message-content {
@@ -338,7 +344,7 @@
         }
 
         .message.user .message-content {
-            background: linear-gradient(45deg, #FFD700, #FFA500); /* Improved: Brighter user message background */
+            background: linear-gradient(45deg, #e5e5e5); /* Improved: Brighter user message background */
             color: #333; /* Improved: Dark text for contrast */
         }
 
