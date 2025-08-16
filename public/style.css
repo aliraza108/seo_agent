@@ -1,5 +1,4 @@
-/* --- CSS Variables and Basic Setup --- */
-:root {
+/* :root {
     --bg-color: #FFFFFF;
     --text-color: #1a1a1a;
     --primary-accent: #FFD60A;
@@ -31,7 +30,6 @@ body {
     padding: 20px;
 }
 
-/* --- Colorful Large Background Circles (Enhanced Aurora Effect) --- */
 body::before {
     content: '';
     position: absolute;
@@ -56,7 +54,6 @@ body::before {
     100% { transform: translateX(-45%) scale(1.1); opacity: 1; }
 }
 
-/* --- Main Content & Headings --- */
 main {
     text-align: center;
     width: 100%;
@@ -68,7 +65,7 @@ main {
 }
 
 .hero-content {
-    margin-bottom: 20px; /* Reduced margin for less gap */
+    margin-bottom: 20px; 
 }
 
 .main-heading {
@@ -84,7 +81,6 @@ main {
     margin-top: -10px;
 }
 
-/* --- Chat Interface --- */
 .chat-wrapper {
     flex-grow: 1;
     display: flex;
@@ -92,7 +88,7 @@ main {
     justify-content: flex-end;
     padding-bottom: 0;
     min-height: 0;
-    margin-bottom: 10px; /* Reduced bottom margin */
+    margin-bottom: 10px; 
 }
 
 #chat-box {
@@ -105,7 +101,7 @@ main {
     display: flex;
     flex-direction: column;
     gap: 15px;
-    margin-bottom: 10px; /* Reduced margin */
+    margin-bottom: 10px; 
 }
 
 .bot-message, .user-message {
@@ -182,9 +178,8 @@ main {
     transform: translateY(-50%) scale(1.1);
 }
 
-/* --- Features Section --- */
 .features-section {
-    margin-bottom: 20px; /* Reduced margin */
+    margin-bottom: 20px; 
 }
 
 .features-heading {
@@ -225,9 +220,8 @@ main {
     font-size: 1.2em;
 }
 
-/* --- Footer Counter --- */
 footer {
-    padding: 10px 0; /* Reduced padding */
+    padding: 10px 0; 
 }
 
 .counter {
@@ -235,7 +229,7 @@ footer {
     font-size: 14px;
 }
 
-/* --- Social Icons and Developed By --- */
+
 .social-icons {
     display: flex;
     justify-content: center;
@@ -277,7 +271,6 @@ footer {
     color: #777;
 }
 
-/* --- Base Styles for Hiding the Scrollbar --- */
 #chat-box::-webkit-scrollbar {
     display: none;
 }
@@ -287,7 +280,6 @@ footer {
     -ms-overflow-style: none;
 }
 
-/* --- Responsive Design --- */
 @media (max-width: 768px) {
     body {
         padding: 15px;
@@ -340,4 +332,268 @@ footer {
     body {
         padding: 10px;
     }
+} */
+
+
+
+
+
+:root {
+    --bg-color: #121212;
+    --primary-panel-bg: #1E1E1E;
+    --secondary-panel-bg: #2A2A2A;
+    --border-color: #383838;
+    --text-color: #E0E0E0;
+    --text-muted-color: #A0A0A0;
+    --accent-color: #00A36C;
+    --user-msg-bg: #005A3A;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.main-container {
+    display: flex;
+    width: 100%;
+    max-width: 1200px;
+    height: 90vh;
+    max-height: 800px;
+    background-color: var(--primary-panel-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+/* Chat Container Styles */
+.chat-container {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+.chat-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.chat-header h2 {
+    font-size: 1.2rem;
+}
+
+#clear-chat-btn {
+    background-color: var(--accent-color);
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.2s;
+}
+
+#clear-chat-btn:hover {
+    background-color: #007a52;
+}
+
+.quick-actions {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.action-btn {
+    background-color: var(--secondary-panel-bg);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 15px;
+    text-align: left;
+    cursor: pointer;
+    transition: border-color 0.2s, background-color 0.2s;
+}
+
+.action-btn:hover {
+    border-color: var(--accent-color);
+    background-color: #333;
+}
+
+.action-btn i {
+    display: block;
+    font-size: 1.2rem;
+    margin-bottom: 8px;
+    color: var(--text-muted-color);
+}
+
+.action-btn span {
+    font-weight: 500;
+}
+
+.chat-box-wrapper {
+    flex-grow: 1;
+    overflow-y: auto;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+}
+
+#chat-box {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.bot-message, .user-message {
+    max-width: 80%;
+    padding: 12px;
+    border-radius: 10px;
+    line-height: 1.5;
+}
+
+.bot-message {
+    background-color: var(--secondary-panel-bg);
+    align-self: flex-start;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+}
+
+.bot-message i {
+    color: var(--accent-color);
+    font-size: 1.2rem;
+    margin-top: 2px;
+}
+
+.user-message {
+    background-color: var(--user-msg-bg);
+    color: white;
+    align-self: flex-end;
+}
+
+#chat-form {
+    display: flex;
+    gap: 10px;
+}
+
+#user-input {
+    flex-grow: 1;
+    background-color: var(--secondary-panel-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 12px;
+    color: var(--text-color);
+    font-size: 1rem;
+}
+
+#user-input:focus {
+    outline: none;
+    border-color: var(--accent-color);
+}
+
+#chat-form button {
+    background-color: var(--secondary-panel-bg);
+    color: var(--text-muted-color);
+    border: 1px solid var(--border-color);
+    width: 45px;
+    height: 45px;
+    border-radius: 8px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+#chat-form button:hover {
+    background-color: var(--accent-color);
+    color: white;
+}
+
+/* Sidebar Styles */
+.sidebar {
+    width: 300px;
+    flex-shrink: 0;
+    background-color: var(--bg-color); /* Slightly different background */
+    padding: 20px;
+    border-left: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.sidebar-section h3 {
+    font-size: 0.9rem;
+    color: var(--text-muted-color);
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.suggestion-btn {
+    width: 100%;
+    background-color: var(--secondary-panel-bg);
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+    padding: 12px;
+    margin-bottom: 10px;
+    border-radius: 6px;
+    text-align: left;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.suggestion-btn:hover {
+    background-color: #3a3a3a;
+}
+
+.tool-btn {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+    color: white;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.tool-btn i {
+    width: 16px;
+}
+
+.tool-btn:hover {
+    background-color: #007a52;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+::-webkit-scrollbar-track {
+    background: var(--primary-panel-bg);
+}
+::-webkit-scrollbar-thumb {
+    background: #555;
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #777;
 }
