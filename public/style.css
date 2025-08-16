@@ -1160,3 +1160,18 @@ body::after { width: 600px; height: 600px; bottom: -150px; right: -200px; backgr
 .chat-container.expanded {
     height: 85vh; /* bigger height after suggestions hidden */
 }
+
+/* Hide suggested questions + tools + sidebar in mobile */
+@media (max-width: 768px) {
+  .suggestions,
+  .seo-tools,
+  .sidebar {
+    display: none !important;
+  }
+
+  /* Make chat-container full height in mobile */
+  .chat-container {
+    height: calc(100vh - 100px); /* adjust if needed */
+    margin-top: 10px;
+  }
+}
